@@ -1,4 +1,4 @@
-# Proyecto Final 2025-1: AI Neural Network
+# Proyecto Final 2025-1: Pong AI
 ## **CS2013 Programación III** · Informe Final
 
 ### **Descripción**
@@ -77,15 +77,13 @@ Pong_AI/
 ├── include/utec/agent/      # Agente SARSA y entorno Pong
 ├── src/                     # Implementación
 ├── main.cpp                 # Entrenamiento completo
-├── test_model_eval.cpp      # Evaluación del modelo guardado
-└── winrate.csv              # Resultados por bloque
 ```
 
 #### 2.3 Casos de prueba
 
 * Test de forward y backward en `Dense`
 * Evaluación de convergencia del agente
-* Validación del modelo entrenado (`test_model_eval.cpp`)
+* Validación del modelo entrenado (`test_agent_env.cpp`)
 
 ---
 
@@ -98,7 +96,7 @@ Pong_AI/
    ```
 3. Ejecutar evaluación del modelo:
    ```bash
-   ./test_model_eval
+   ./test_agent_env
    ```
 4. Analizar resultados:
     * `pesos.txt`: pesos del modelo
@@ -109,7 +107,7 @@ Pong_AI/
 ### 4. Análisis del rendimiento
 
 * **Episodios entrenados**: 3000
-* **Duración aprox.**: ~1.5 min
+* **Duración aprox.**: ~5 sec
 * **Modelo final**: arquitectura 3–16–8–1 con activaciones ReLU
 * **Winrate evaluado**: 35–45% promedio sin replay buffer
 * **Observaciones**:
