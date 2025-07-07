@@ -118,6 +118,8 @@ Pong_AI/
     * Agregar replay buffer y batch training
     * Exportar métricas y visualizar en Python
 
+* **Video de Demostración**:
+ * https://youtu.be/ksVcA2Vv55g
 ---
 
 ### 5. Trabajo en equipo
