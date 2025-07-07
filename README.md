@@ -1,10 +1,11 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/Lj3YlzJp)
 # Proyecto Final 2025-1: AI Neural Network
 ## **CS2013 Programación III** · Informe Final
 
 ### **Descripción**
 
-> Ejemplo: Implementación de una red neuronal multicapa en C++ para clasificación de dígitos manuscritos.
+Implementación de una red neuronal multicapa en C++ desde cero para controlar un agente que juega Pong. El sistema aplica aprendizaje por refuerzo con SARSA, arquitectura modular de capas, normalización de entradas, exploración ε-greedy y entrenamiento supervisado. No se utilizó ninguna librería de machine learning externa.
+
+---
 
 ### Contenidos
 
@@ -18,147 +19,140 @@
 8. [Conclusiones](#6-conclusiones)
 9. [Bibliografía](#7-bibliografía)
 10. [Licencia](#licencia)
+
 ---
 
 ### Datos generales
 
-* **Tema**: Redes Neuronales en AI
-* **Grupo**: `group_3_custom_name`
+* **Tema**: Redes Neuronales para Aprendizaje por Refuerzo
+* **Grupo**: `j3ingineers`
 * **Integrantes**:
 
-  * Alumno A – 209900001 (Responsable de investigación teórica)
-  * Alumno B – 209900002 (Desarrollo de la arquitectura)
-  * Alumno C – 209900003 (Implementación del modelo)
-  * Alumno D – 209900004 (Pruebas y benchmarking)
-  * Alumno E – 209900005 (Documentación y demo)
-
-> *Nota: Reemplazar nombres y roles reales.*
+    * Diego Antonio Escajadillo Guerrero - 201910150
 
 ---
 
 ### Requisitos e instalación
 
-1. **Compilador**: GCC 11 o superior
+1. **Compilador**: GCC 11 o superior / MSVC 2019 con C++17
 2. **Dependencias**:
 
-   * CMake 3.18+
-   * Eigen 3.4
-   * \[Otra librería opcional]
+    * CMake 3.18+
+    * Ninguna otra librería externa
+
 3. **Instalación**:
 
    ```bash
-   git clone https://github.com/EJEMPLO/proyecto-final.git
-   cd proyecto-final
+   git clone https://github.com/usuario/proyecto-pong-ai.git
+   cd proyecto-pong-ai
    mkdir build && cd build
    cmake ..
    make
    ```
 
-> *Ejemplo de repositorio y comandos, ajustar según proyecto.*
-
 ---
 
 ### 1. Investigación teórica
 
-* **Objetivo**: Explorar fundamentos y arquitecturas de redes neuronales.
-* **Contenido de ejemplo**:
-
-  1. Historia y evolución de las NNs.
-  2. Principales arquitecturas: MLP, CNN, RNN.
-  3. Algoritmos de entrenamiento: backpropagation, optimizadores.
+* Historia de las redes neuronales
+* Aprendizaje por refuerzo: SARSA vs Q-Learning
+* Exploración-explotación: política ε-greedy
+* Normalización de entradas y funciones de activación (ReLU)
 
 ---
 
 ### 2. Diseño e implementación
 
-#### 2.1 Arquitectura de la solución
+#### 2.1 Arquitectura modular
 
-* **Patrones de diseño**: ejemplo: Factory para capas, Strategy para optimizadores.
-* **Estructura de carpetas (ejemplo)**:
+* Capas como clases que heredan de `ILayer`
+* Optimización mediante `SGD`
+* Entrenamiento on-policy con `learnOnPolicy()`
 
-  ```
-  proyecto-final/
-  ├── src/
-  │   ├── layers/
-  │   ├── optimizers/
-  │   └── main.cpp
-  ├── tests/
-  └── docs/
-  ```
+#### 2.2 Organización del proyecto
 
-#### 2.2 Manual de uso y casos de prueba
+```
+Pong_AI/
+├── include/utec/nn/         # Capas, red y optimizadores
+├── include/utec/agent/      # Agente SARSA y entorno Pong
+├── src/                     # Implementación
+├── main.cpp                 # Entrenamiento completo
+├── test_model_eval.cpp      # Evaluación del modelo guardado
+└── winrate.csv              # Resultados por bloque
+```
 
-* **Cómo ejecutar**: `./build/neural_net_demo input.csv output.csv`
-* **Casos de prueba**:
+#### 2.3 Casos de prueba
 
-  * Test unitario de capa densa.
-  * Test de función de activación ReLU.
-  * Test de convergencia en dataset de ejemplo.
-
-> *Personalizar rutas, comandos y casos reales.*
+* Test de forward y backward en `Dense`
+* Evaluación de convergencia del agente
+* Validación del modelo entrenado (`test_model_eval.cpp`)
 
 ---
 
 ### 3. Ejecución
 
-> **Demo de ejemplo**: Video/demo alojado en `docs/demo.mp4`.
-> Pasos:
->
-> 1. Preparar datos de entrenamiento (formato CSV).
-> 2. Ejecutar comando de entrenamiento.
-> 3. Evaluar resultados con script de validación.
+1. Compilar el proyecto
+2. Ejecutar entrenamiento:
+   ```bash
+   ./Pong_AI
+   ```
+3. Ejecutar evaluación del modelo:
+   ```bash
+   ./test_model_eval
+   ```
+4. Analizar resultados:
+    * `pesos.txt`: pesos del modelo
+    * `winrate.csv`: desempeño por bloques de entrenamiento
 
 ---
 
 ### 4. Análisis del rendimiento
 
-* **Métricas de ejemplo**:
-
-  * Iteraciones: 1000 épocas.
-  * Tiempo total de entrenamiento: 2m30s.
-  * Precisión final: 92.5%.
-* **Ventajas/Desventajas**:
-
-  * * Código ligero y dependencias mínimas.
-  * – Sin paralelización, rendimiento limitado.
+* **Episodios entrenados**: 3000
+* **Duración aprox.**: ~1.5 min
+* **Modelo final**: arquitectura 3–16–8–1 con activaciones ReLU
+* **Winrate evaluado**: 35–45% promedio sin replay buffer
+* **Observaciones**:
+    * 🟢 Entrena sin dependencias externas
+    * 🔴 Limitado por no usar experiencia acumulada
 * **Mejoras futuras**:
-
-  * Uso de BLAS para multiplicaciones (Justificación).
-  * Paralelizar entrenamiento por lotes (Justificación).
+    * Implementar Q-Learning off-policy
+    * Agregar replay buffer y batch training
+    * Exportar métricas y visualizar en Python
 
 ---
 
 ### 5. Trabajo en equipo
 
-| Tarea                     | Miembro  | Rol                       |
-| ------------------------- | -------- | ------------------------- |
-| Investigación teórica     | Alumno A | Documentar bases teóricas |
-| Diseño de la arquitectura | Alumno B | UML y esquemas de clases  |
-| Implementación del modelo | Alumno C | Código C++ de la NN       |
-| Pruebas y benchmarking    | Alumno D | Generación de métricas    |
-| Documentación y demo      | Alumno E | Tutorial y video demo     |
-
-> *Actualizar con tareas y nombres reales.*
+| Tarea                        | Miembro       | Rol                           |
+|-----------------------------|----------------|--------------------------------|
+| Investigación teórica       | Diego Escajadillo     | Documentar teoría RL y NNs     |
+| Diseño y normalización      |                 | Arquitectura + entradas        |
+| Implementación de la red    |                 | Clases Dense, ReLU, NN         |
+| Entrenamiento SARSA         |                 | Agente y lógica de aprendizaje |
+| Pruebas y winrate.csv       |                 | Registro y visualización       |
+| Documentación final         |                    | README, licencias y demo       |
 
 ---
 
 ### 6. Conclusiones
 
-* **Logros**: Implementar NN desde cero, validar en dataset de ejemplo.
-* **Evaluación**: Calidad y rendimiento adecuados para propósito académico.
-* **Aprendizajes**: Profundización en backpropagation y optimización.
-* **Recomendaciones**: Escalar a datasets más grandes y optimizar memoria.
+* Se logró implementar un sistema completo de RL con SARSA desde cero.
+* El agente aprende parcialmente, aunque el rendimiento es limitado por falta de memoria.
+* Aprendimos a integrar teoría, entrenamiento supervisado y refuerzo.
+* El proyecto es una buena base para evolucionar hacia DQN o PPO.
 
 ---
 
 ### 7. Bibliografía
 
-> *Actualizar con bibliografia utilizada, al menos 4 referencias bibliograficas y usando formato IEEE de referencias bibliograficas.*
+[1] R. S. Sutton and A. G. Barto, *Reinforcement Learning: An Introduction*, MIT Press, 2018.  
+[2] I. Goodfellow, Y. Bengio, and A. Courville, *Deep Learning*, MIT Press, 2016.  
+[3] F. Chollet, *Deep Learning with Python*, Manning, 2017.  
+[4] D. Silver et al., "Mastering the game of Go with deep neural networks and tree search," *Nature*, vol. 529, 2016.
 
 ---
 
 ### Licencia
 
 Este proyecto usa la licencia **MIT**. Ver [LICENSE](LICENSE) para detalles.
-
----
